@@ -806,6 +806,12 @@ app.delete('/api/intake/:id', async (req, res) => {
 });
 
 // --- SERVER LISTENER ---
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+// Only listen on a port if we are testing locally
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+  });
+}
+
+// Export the app for Vercel Serverless execution
+export default app;
