@@ -1,0 +1,130 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  
+}
+
+// Category for items like Fridge, AC, Washer
+model Category {
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  products Product[]
+}
+
+// The General Product Info
+model Product {
+  id          Int      @id @default(autoincrement())
+  modelNumber String   @unique
+  brand       String
+  modelName   String
+  price       Float
+  costPrice   Float    @default(0) // What YOU paid for it
+  stock       Int      @default(0)
+  categoryId  Int
+  category    Category @relation(fields: [categoryId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relationships
+  orderItems     OrderItem[]
+  inventoryItems InventoryItem[]
+  
+  //  Multi-Store Intake History
+  intakes        StockIntake[]
+}
+
+// Individual units with Serial Numbers
+model InventoryItem {
+  id           Int      @id @default(autoincrement())
+  serialNumber String   @unique
+  status       String   @default("AVAILABLE") // AVAILABLE, SOLD, RESERVED
+  productId    Int
+  product      Product  @relation(fields: [productId], references: [id])
+}
+
+// Sales and Customers
+model Sale {
+  id            Int      @id @default(autoincrement())
+  customerName  String
+  customerPhone String
+  totalAmount   Decimal
+  saleDate      DateTime @default(now())
+  paymentType   String   // CASH, CARD, INSTALLMENT
+}
+
+model Customer {
+  id        Int      @id @default(autoincrement())
+  phone     String   @unique
+  name      String
+  address   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  orders    Order[]  
+}
+
+// ==========================================
+// THE ORDER PROCESSING TABLES
+// ==========================================
+
+model Order {
+  id            Int         @id @default(autoincrement())
+  
+  // Link to the Customer
+  customerId    Int?        // Optional, in case of a walk-in
+  customer      Customer?   @relation(fields: [customerId], references: [id])
+  
+  // Money Math
+  subtotal      Float
+  discountRate  Float       @default(0)
+  taxRate       Float       @default(0)
+  grandTotal    Float
+  
+  paymentMethod String      // 'cash' or 'card'
+  
+  createdAt     DateTime    @default(now())
+  status        String      @default("COMPLETED")
+  
+  // Link to the specific items bought in this order
+  items         OrderItem[]
+}
+
+model OrderItem {
+  id             Int      @id @default(autoincrement())
+  orderId        Int
+  order          Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId      Int
+  product        Product  @relation(fields: [productId], references: [id])
+  quantity       Int
+  priceAtSale    Float    
+  serialNumber   String?  
+  warrantyMonths Int      @default(0) 
+}
+
+// ==========================================
+// STAFF & AUTHENTICATION
+// ==========================================
+model User {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  password  String   // Encrypted
+  role      String   @default("CASHIER") // "CASHIER" or "ADMIN"
+  name      String
+  createdAt DateTime @default(now())
+}
+
+// ==========================================
+// MULTI-STORE INVENTORY TRACKING
+// ==========================================
+model StockIntake {
+  id          Int      @id @default(autoincrement())
+  productId   Int
+  product     Product  @relation(fields: [productId], references: [id])
+  quantity    Int
+  destination String   // "Store 1 - Main Showroom" or "Store 2 - Branch"
+  supplier    String?
+  receivedAt  DateTime @default(now())
+}
