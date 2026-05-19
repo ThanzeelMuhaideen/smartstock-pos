@@ -14,7 +14,7 @@ export default function Transactions() {
 
   const fetchOrders = async () => {
     try {
-      const response = await axios.get('https://smartstock-pos.vercel.app//api/orders');
+      const response = await axios.get(import.meta.env.VITE_API_URL + '//api/orders');
       setOrders(response.data);
       if (response.data.length > 0) {
         setSelectedOrder(response.data[0]);

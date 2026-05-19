@@ -18,7 +18,7 @@ export default function Customers() {
 
   const fetchCustomers = async () => {
     try {
-      const response = await axios.get('https://smartstock-pos.vercel.app//api/customers');
+      const response = await axios.get(import.meta.env.VITE_API_URL + '//api/customers');
       setCustomers(response.data);
     } catch (err) { console.error("Failed to fetch customers", err); }
   };
@@ -36,7 +36,7 @@ export default function Customers() {
     e.preventDefault();
     try {
       if (editingId) await axios.put(`https://smartstock-pos.vercel.app//api/customers/${editingId}`, formData);
-      else await axios.post('https://smartstock-pos.vercel.app//api/customers', formData);
+      else await axios.post(import.meta.env.VITE_API_URL + '//api/customers', formData);
       fetchCustomers();
       resetForm();
     } catch (error) { alert(error.response?.data?.error || "Failed to save customer."); }

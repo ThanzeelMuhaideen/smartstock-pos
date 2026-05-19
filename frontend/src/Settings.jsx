@@ -13,7 +13,7 @@ export default function Settings() {
 
   const fetchStaff = async () => {
     try {
-      const response = await axios.get('https://smartstock-pos.vercel.app//api/users');
+      const response = await axios.get(import.meta.env.VITE_API_URL + '//api/users');
       setStaff(response.data);
     } catch (error) {
       console.error("Failed to load staff", error);
@@ -36,7 +36,7 @@ export default function Settings() {
         alert(`Account updated successfully!`);
       } else {
         // CREATE NEW USER
-        await axios.post('https://smartstock-pos.vercel.app//api/users', formData);
+        await axios.post(import.meta.env.VITE_API_URL + '//api/users', formData);
         alert(`Account created successfully for ${formData.name}!`);
       }
       

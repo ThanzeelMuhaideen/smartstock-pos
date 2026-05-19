@@ -4,7 +4,7 @@ import { LogOut } from 'lucide-react'; // Added icon for logout
 export default function Layout({ user, handleLogout }) {
   const location = useLocation();
 
-  // REAL-WORLD RBAC: We define exactly who is allowed to see which link
+  // We define exactly who is allowed to see which link
   const menuGroups = [
     {
       title: "Store Operations",

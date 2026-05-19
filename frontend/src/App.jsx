@@ -174,7 +174,7 @@ function POSInterface() {
     };
 
     try {
-      const response = await axios.post('https://smartstock-pos.vercel.app//api/orders', orderData);
+      const response = await axios.post(import.meta.env.VITE_API_URL + '//api/orders', orderData);
       alert(`Payment Successful! 🎉\nOrder #${response.data.orderId}\nTotal: Rs. ${grandTotal.toFixed(2)}`);
       setCart([]);
       setIsCheckoutOpen(false);

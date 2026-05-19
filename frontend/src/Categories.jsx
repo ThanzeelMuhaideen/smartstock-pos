@@ -9,7 +9,7 @@ export default function Categories() {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get('https://smartstock-pos.vercel.app//api/categories');
+      const response = await axios.get(import.meta.env.VITE_API_URL + '//api/categories');
       setCategories(response.data);
     } catch (err) {
       console.error("Failed to fetch categories", err);
@@ -30,7 +30,7 @@ export default function Categories() {
         await axios.put(`https://smartstock-pos.vercel.app//api/categories/${editingId}`, { name: newCategoryName });
       } else {
         // Create new category
-        await axios.post('https://smartstock-pos.vercel.app//api/categories', { name: newCategoryName });
+        await axios.post(import.meta.env.VITE_API_URL + '//api/categories', { name: newCategoryName });
       }
       
       setNewCategoryName(''); 

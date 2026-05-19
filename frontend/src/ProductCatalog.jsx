@@ -23,8 +23,8 @@ export default function ProductCatalog({ user }) {
   const fetchData = async () => {
     try {
       const [prodRes, catRes] = await Promise.all([
-        axios.get('https://smartstock-pos.vercel.app//api/products'),
-        axios.get('https://smartstock-pos.vercel.app//api/categories')
+        axios.get(import.meta.env.VITE_API_URL + '//api/products'),
+        axios.get(import.meta.env.VITE_API_URL + '//api/categories')
       ]);
       setProducts(prodRes.data);
       setCategories(catRes.data);
@@ -63,7 +63,7 @@ export default function ProductCatalog({ user }) {
       if (editingId) {
         await axios.put(`https://smartstock-pos.vercel.app//api/products/${editingId}`, formData);
       } else {
-        await axios.post('https://smartstock-pos.vercel.app//api/products', formData);
+        await axios.post(import.meta.env.VITE_API_URL + '//api/products', formData);
       }
       fetchData();
       resetForm(); 

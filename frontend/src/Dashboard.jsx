@@ -35,9 +35,9 @@ export default function Dashboard() {
   const fetchDashboardData = async () => {
     try {
       const [ordersRes, productsRes, intakesRes] = await Promise.all([
-        axios.get('https://smartstock-pos.vercel.app//api/orders'),
-        axios.get('https://smartstock-pos.vercel.app//api/products'),
-        axios.get('https://smartstock-pos.vercel.app//api/intake')
+        axios.get(import.meta.env.VITE_API_URL + '//api/orders'),
+        axios.get(import.meta.env.VITE_API_URL + '//api/products'),
+        axios.get(import.meta.env.VITE_API_URL + '//api/intake')
       ]);
       setOrders(ordersRes.data);
       setProducts(productsRes.data);

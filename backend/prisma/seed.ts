@@ -20,6 +20,7 @@ async function main() {
   const samsungFridge = await prisma.product.create({
     data: {
       modelName: 'RT38 Double Door',
+      modelNumber: 'RT38',
       brand: 'Samsung',
       price: 850.00,
       categoryId: fridgeCat.id,

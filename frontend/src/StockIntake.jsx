@@ -34,8 +34,8 @@ export default function StockIntake() {
   const fetchData = async () => {
     try {
       const [productsRes, intakesRes] = await Promise.all([
-        axios.get('https://smartstock-pos.vercel.app//api/products'),
-        axios.get('https://smartstock-pos.vercel.app//api/intake')
+        axios.get(import.meta.env.VITE_API_URL + '//api/products'),
+        axios.get(import.meta.env.VITE_API_URL + '//api/intake')
       ]);
       setProducts(productsRes.data);
       setIntakes(intakesRes.data);
@@ -65,7 +65,7 @@ export default function StockIntake() {
         await axios.put(`https://smartstock-pos.vercel.app//api/intake/${editingIntakeId}`, formData);
         alert('Record updated and inventory adjusted!');
       } else {
-        await axios.post('https://smartstock-pos.vercel.app//api/intake', formData);
+        await axios.post(import.meta.env.VITE_API_URL + '//api/intake', formData);
         alert('Stock successfully received and added to inventory!');
       }
       
