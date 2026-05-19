@@ -34,8 +34,8 @@ export default function StockIntake() {
   const fetchData = async () => {
     try {
       const [productsRes, intakesRes] = await Promise.all([
-        axios.get('http://localhost:5000/api/products'),
-        axios.get('http://localhost:5000/api/intake')
+        axios.get('https://smartstock-pos.vercel.app//api/products'),
+        axios.get('https://smartstock-pos.vercel.app//api/intake')
       ]);
       setProducts(productsRes.data);
       setIntakes(intakesRes.data);
@@ -62,10 +62,10 @@ export default function StockIntake() {
     setLoading(true);
     try {
       if (editingIntakeId) {
-        await axios.put(`http://localhost:5000/api/intake/${editingIntakeId}`, formData);
+        await axios.put(`https://smartstock-pos.vercel.app//api/intake/${editingIntakeId}`, formData);
         alert('Record updated and inventory adjusted!');
       } else {
-        await axios.post('http://localhost:5000/api/intake', formData);
+        await axios.post('https://smartstock-pos.vercel.app//api/intake', formData);
         alert('Stock successfully received and added to inventory!');
       }
       
@@ -81,7 +81,7 @@ export default function StockIntake() {
   const handleDelete = async (record) => {
     if (window.confirm(`Are you sure you want to delete this record? This will subtract ${record.quantity} units from your global inventory.`)) {
       try {
-        await axios.delete(`http://localhost:5000/api/intake/${record.id}`);
+        await axios.delete(`https://smartstock-pos.vercel.app//api/intake/${record.id}`);
         fetchData();
       } catch (error) {
         alert("Failed to delete record.");

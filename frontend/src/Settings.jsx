@@ -13,7 +13,7 @@ export default function Settings() {
 
   const fetchStaff = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/users');
+      const response = await axios.get('https://smartstock-pos.vercel.app//api/users');
       setStaff(response.data);
     } catch (error) {
       console.error("Failed to load staff", error);
@@ -32,11 +32,11 @@ export default function Settings() {
     try {
       if (editingUserId) {
         // UPDATE EXISTING USER
-        await axios.put(`http://localhost:5000/api/users/${editingUserId}`, formData);
+        await axios.put(`https://smartstock-pos.vercel.app//api/users/${editingUserId}`, formData);
         alert(`Account updated successfully!`);
       } else {
         // CREATE NEW USER
-        await axios.post('http://localhost:5000/api/users', formData);
+        await axios.post('https://smartstock-pos.vercel.app//api/users', formData);
         alert(`Account created successfully for ${formData.name}!`);
       }
       
@@ -52,7 +52,7 @@ export default function Settings() {
   const handleDelete = async (id, name) => {
     if (window.confirm(`Are you sure you want to delete ${name}'s account? They will lose all access.`)) {
       try {
-        await axios.delete(`http://localhost:5000/api/users/${id}`);
+        await axios.delete(`https://smartstock-pos.vercel.app//api/users/${id}`);
         fetchStaff();
       } catch (error) {
         alert(error.response?.data?.error || "Failed to delete account.");

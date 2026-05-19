@@ -20,8 +20,8 @@ export default function AIInsights() {
   const generateAIForecast = async () => {
     try {
       const [productsRes, ordersRes] = await Promise.all([
-        axios.get('http://localhost:5000/api/products'),
-        axios.get('http://localhost:5000/api/orders')
+        axios.get('https://smartstock-pos.vercel.app//api/products'),
+        axios.get('https://smartstock-pos.vercel.app//api/orders')
       ]);
 
       const products = productsRes.data;

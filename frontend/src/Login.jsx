@@ -17,7 +17,7 @@ export default function Login({ onLoginSuccess }) {
     setLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', { username, password });
+      const response = await axios.post('https://smartstock-pos.vercel.app//api/auth/login', { username, password });
       
       // Safety Check: If they use the Manager toggle but aren't an admin, reject them!
       if (loginMode === 'ADMIN' && response.data.user.role !== 'ADMIN') {

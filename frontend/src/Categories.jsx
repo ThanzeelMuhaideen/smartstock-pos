@@ -9,7 +9,7 @@ export default function Categories() {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/categories');
+      const response = await axios.get('https://smartstock-pos.vercel.app//api/categories');
       setCategories(response.data);
     } catch (err) {
       console.error("Failed to fetch categories", err);
@@ -27,10 +27,10 @@ export default function Categories() {
     try {
       if (editingId) {
         // Update existing category
-        await axios.put(`http://localhost:5000/api/categories/${editingId}`, { name: newCategoryName });
+        await axios.put(`https://smartstock-pos.vercel.app//api/categories/${editingId}`, { name: newCategoryName });
       } else {
         // Create new category
-        await axios.post('http://localhost:5000/api/categories', { name: newCategoryName });
+        await axios.post('https://smartstock-pos.vercel.app//api/categories', { name: newCategoryName });
       }
       
       setNewCategoryName(''); 
@@ -49,7 +49,7 @@ export default function Categories() {
   const handleDelete = async (id) => {
     if (window.confirm("Delete this category?")) {
       try {
-        await axios.delete(`http://localhost:5000/api/categories/${id}`);
+        await axios.delete(`https://smartstock-pos.vercel.app//api/categories/${id}`);
         fetchCategories();
       } catch (error) {
         // This alerts the user if products are still using this category!

@@ -18,7 +18,7 @@ export default function Customers() {
 
   const fetchCustomers = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/customers');
+      const response = await axios.get('https://smartstock-pos.vercel.app//api/customers');
       setCustomers(response.data);
     } catch (err) { console.error("Failed to fetch customers", err); }
   };
@@ -35,8 +35,8 @@ export default function Customers() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (editingId) await axios.put(`http://localhost:5000/api/customers/${editingId}`, formData);
-      else await axios.post('http://localhost:5000/api/customers', formData);
+      if (editingId) await axios.put(`https://smartstock-pos.vercel.app//api/customers/${editingId}`, formData);
+      else await axios.post('https://smartstock-pos.vercel.app//api/customers', formData);
       fetchCustomers();
       resetForm();
     } catch (error) { alert(error.response?.data?.error || "Failed to save customer."); }
@@ -50,7 +50,7 @@ export default function Customers() {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this customer?")) {
       try {
-        await axios.delete(`http://localhost:5000/api/customers/${id}`);
+        await axios.delete(`https://smartstock-pos.vercel.app//api/customers/${id}`);
         fetchCustomers();
       } catch (error) { alert("Failed to delete customer."); }
     }
@@ -59,7 +59,7 @@ export default function Customers() {
   const handleViewHistory = async (customer) => {
     setActiveCustomer(customer); // Now passes the whole object
     try {
-      const response = await axios.get(`http://localhost:5000/api/customers/${customer.id}/orders`);
+      const response = await axios.get(`https://smartstock-pos.vercel.app//api/customers/${customer.id}/orders`);
       setOrderHistory(response.data);
       setIsHistoryOpen(true);
     } catch (error) { alert("Failed to load customer history."); }

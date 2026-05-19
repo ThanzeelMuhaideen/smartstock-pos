@@ -23,8 +23,8 @@ export default function ProductCatalog({ user }) {
   const fetchData = async () => {
     try {
       const [prodRes, catRes] = await Promise.all([
-        axios.get('http://localhost:5000/api/products'),
-        axios.get('http://localhost:5000/api/categories')
+        axios.get('https://smartstock-pos.vercel.app//api/products'),
+        axios.get('https://smartstock-pos.vercel.app//api/categories')
       ]);
       setProducts(prodRes.data);
       setCategories(catRes.data);
@@ -61,9 +61,9 @@ export default function ProductCatalog({ user }) {
 
     try {
       if (editingId) {
-        await axios.put(`http://localhost:5000/api/products/${editingId}`, formData);
+        await axios.put(`https://smartstock-pos.vercel.app//api/products/${editingId}`, formData);
       } else {
-        await axios.post('http://localhost:5000/api/products', formData);
+        await axios.post('https://smartstock-pos.vercel.app//api/products', formData);
       }
       fetchData();
       resetForm(); 
@@ -89,7 +89,7 @@ export default function ProductCatalog({ user }) {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this product?")) {
       try {
-        await axios.delete(`http://localhost:5000/api/products/${id}`);
+        await axios.delete(`https://smartstock-pos.vercel.app//api/products/${id}`);
         fetchData();
       } catch (error) {
         alert("Failed to delete product.");

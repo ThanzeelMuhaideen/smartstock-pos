@@ -14,7 +14,7 @@ export default function Transactions() {
 
   const fetchOrders = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/orders');
+      const response = await axios.get('https://smartstock-pos.vercel.app//api/orders');
       setOrders(response.data);
       if (response.data.length > 0) {
         setSelectedOrder(response.data[0]);
@@ -34,7 +34,7 @@ export default function Transactions() {
   const handleRefund = async (order) => {
     if (window.confirm(`Are you sure you want to process a full refund for ${order.id}? This will restock the inventory.`)) {
       try {
-        await axios.put(`http://localhost:5000/api/orders/${order.originalId}/refund`);
+        await axios.put(`https://smartstock-pos.vercel.app//api/orders/${order.originalId}/refund`);
         setOrders(orders.map(o => o.id === order.id ? { ...o, status: 'REFUNDED' } : o));
         setSelectedOrder({ ...selectedOrder, status: 'REFUNDED' });
         alert("Refund processed successfully. Inventory has been restocked.");
