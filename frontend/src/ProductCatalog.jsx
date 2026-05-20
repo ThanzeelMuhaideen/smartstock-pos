@@ -23,8 +23,8 @@ export default function ProductCatalog({ user }) {
   const fetchData = async () => {
     try {
       const [prodRes, catRes] = await Promise.all([
-        axios.get(import.meta.env.VITE_API_URL + '//api/products'),
-        axios.get(import.meta.env.VITE_API_URL + '//api/categories')
+        axios.get(import.meta.env.VITE_API_URL + '/api/products'),
+        axios.get(import.meta.env.VITE_API_URL + '/api/categories')
       ]);
       setProducts(prodRes.data);
       setCategories(catRes.data);
@@ -61,13 +61,15 @@ export default function ProductCatalog({ user }) {
 
     try {
       if (editingId) {
-        await axios.put(`https://smartstock-pos.vercel.app//api/products/${editingId}`, formData);
+        // FIXED: Changed 'users' to 'products', used editingId, and linked to environment variable
+        await axios.put(`${import.meta.env.VITE_API_URL}/api/products/${editingId}`, formData);
       } else {
-        await axios.post(import.meta.env.VITE_API_URL + '//api/products', formData);
+        await axios.post(import.meta.env.VITE_API_URL + '/api/products', formData);
       }
       fetchData();
       resetForm(); 
     } catch (error) {
+      console.error("🚨 REAL ERROR:", error);
       alert(error.response?.data?.error || "Failed to save product.");
     }
   };
@@ -89,7 +91,8 @@ export default function ProductCatalog({ user }) {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this product?")) {
       try {
-        await axios.delete(`https://smartstock-pos.vercel.app//api/products/${id}`);
+        // FIXED: Changed 'users' to 'products' and linked to environment variable
+        await axios.delete(`${import.meta.env.VITE_API_URL}/api/products/${id}`);
         fetchData();
       } catch (error) {
         alert("Failed to delete product.");

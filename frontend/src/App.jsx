@@ -79,7 +79,8 @@ function POSInterface() {
     setError('');
     if (value.trim().length >= 2) {
       try {
-        const response = await axios.get(`https://smartstock-pos.vercel.app//api/products/search?q=${value}`);
+        // FIXED: Pointed to the products search route
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/products/search?query=${value}`);
         setSearchResults(response.data);
         setShowDropdown(true);
       } catch (err) { console.error("Failed to fetch search results", err); }
@@ -110,7 +111,8 @@ function POSInterface() {
     e.preventDefault(); 
     if (!skuInput.trim()) return;
     try {
-      const response = await axios.get(`https://smartstock-pos.vercel.app//api/products/sku/${skuInput}`);
+      // FIXED: Pointed to fetch a single product by SKU
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/products/${skuInput}`);
       addToCart(response.data);
     } catch (err) {
       setError(`Model '${skuInput.toUpperCase()}' not found.`);
@@ -142,7 +144,8 @@ function POSInterface() {
     setCustomerQuery(val);
     if (val.trim().length >= 2) {
       try {
-        const response = await axios.get(`https://smartstock-pos.vercel.app//api/customers/search?q=${val}`);
+        // FIXED: Pointed to the customers search route
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/customers/search?query=${val}`);
         setCustomerResults(response.data);
         setShowCustDropdown(true);
       } catch (err) { console.error("Failed to search customers", err); }
@@ -174,7 +177,7 @@ function POSInterface() {
     };
 
     try {
-      const response = await axios.post(import.meta.env.VITE_API_URL + '//api/orders', orderData);
+      const response = await axios.post(import.meta.env.VITE_API_URL + '/api/orders', orderData);
       alert(`Payment Successful! 🎉\nOrder #${response.data.orderId}\nTotal: Rs. ${grandTotal.toFixed(2)}`);
       setCart([]);
       setIsCheckoutOpen(false);

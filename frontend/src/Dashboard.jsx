@@ -35,9 +35,9 @@ export default function Dashboard() {
   const fetchDashboardData = async () => {
     try {
       const [ordersRes, productsRes, intakesRes] = await Promise.all([
-        axios.get(import.meta.env.VITE_API_URL + '//api/orders'),
-        axios.get(import.meta.env.VITE_API_URL + '//api/products'),
-        axios.get(import.meta.env.VITE_API_URL + '//api/intake')
+        axios.get(import.meta.env.VITE_API_URL + '/api/orders'),
+        axios.get(import.meta.env.VITE_API_URL + '/api/products'),
+        axios.get(import.meta.env.VITE_API_URL + '/api/intake')
       ]);
       setOrders(ordersRes.data);
       setProducts(productsRes.data);

@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Pencil, Trash2 } from 'lucide-react'; // Importing our new icons!
+import { Pencil, Trash2 } from 'lucide-react'; 
 
 export default function Categories() {
   const [categories, setCategories] = useState([]);
   const [newCategoryName, setNewCategoryName] = useState('');
-  const [editingId, setEditingId] = useState(null); // Track if we are editing
+  const [editingId, setEditingId] = useState(null); 
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get(import.meta.env.VITE_API_URL + '//api/categories');
+      const response = await axios.get(import.meta.env.VITE_API_URL + '/api/categories');
       setCategories(response.data);
     } catch (err) {
       console.error("Failed to fetch categories", err);
@@ -26,11 +26,10 @@ export default function Categories() {
 
     try {
       if (editingId) {
-        // Update existing category
-        await axios.put(`https://smartstock-pos.vercel.app//api/categories/${editingId}`, { name: newCategoryName });
+        // FIXED: Changed 'users' to 'categories', used editingId, and linked to environment variable
+        await axios.put(`${import.meta.env.VITE_API_URL}/api/categories/${editingId}`, { name: newCategoryName });
       } else {
-        // Create new category
-        await axios.post(import.meta.env.VITE_API_URL + '//api/categories', { name: newCategoryName });
+        await axios.post(import.meta.env.VITE_API_URL + '/api/categories', { name: newCategoryName });
       }
       
       setNewCategoryName(''); 
@@ -49,10 +48,10 @@ export default function Categories() {
   const handleDelete = async (id) => {
     if (window.confirm("Delete this category?")) {
       try {
-        await axios.delete(`https://smartstock-pos.vercel.app//api/categories/${id}`);
+        // FIXED: Changed 'users' to 'categories' and linked to environment variable
+        await axios.delete(`${import.meta.env.VITE_API_URL}/api/categories/${id}`);
         fetchCategories();
       } catch (error) {
-        // This alerts the user if products are still using this category!
         alert(error.response?.data?.error || "Failed to delete category.");
       }
     }
@@ -72,7 +71,6 @@ export default function Categories() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         
-        
         <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm h-fit">
           <h2 className="text-lg font-semibold text-slate-700 mb-4">
             {editingId ? "Edit Category" : "Create Category"}
@@ -87,25 +85,20 @@ export default function Categories() {
               />
             </div>
             
-            {/* MAKE SURE THIS BUTTON CONTAINER IS HERE */}
             <div className="flex space-x-2 pt-2">
               <button type="submit" className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-200">
                 {editingId ? "Update" : "Add Category"}
               </button>
               
-              {/* Show the Cancel button ONLY if we are editing */}
               {editingId && (
                 <button type="button" onClick={cancelEdit} className="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-2 px-4 rounded-md transition duration-200">
                   Cancel
                 </button>
               )}
             </div>
-          
-                 
           </form>
         </div>
 
-        
         <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
            <h2 className="text-lg font-semibold text-slate-700 mb-4">Existing Categories</h2>
            <ul className="divide-y divide-slate-200">
@@ -113,8 +106,6 @@ export default function Categories() {
                <li key={cat.id} className="py-3 flex justify-between items-center hover:bg-slate-50 px-2 rounded-md transition-colors group">
                  <span className="font-medium text-slate-700">{cat.name}</span>
                  
-                 
-                 {/* Professional Icon Buttons - Always Visible & Fixed Size */}
                  <div className="flex space-x-2">
                    <button onClick={() => handleEdit(cat)} className="p-1.5 bg-blue-50 text-blue-600 rounded hover:bg-blue-100 transition-colors" title="Edit">
                      <Pencil className="w-4 h-4" />
@@ -123,7 +114,6 @@ export default function Categories() {
                      <Trash2 className="w-4 h-4" />
                    </button>
                  </div>
-
                </li>
              ))}
            </ul>

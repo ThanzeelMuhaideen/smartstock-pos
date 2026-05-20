@@ -20,8 +20,8 @@ export default function AIInsights() {
   const generateAIForecast = async () => {
     try {
       const [productsRes, ordersRes] = await Promise.all([
-        axios.get(import.meta.env.VITE_API_URL + '//api/products'),
-        axios.get(import.meta.env.VITE_API_URL + '//api/orders')
+        axios.get(import.meta.env.VITE_API_URL + '/api/products'),
+        axios.get(import.meta.env.VITE_API_URL + '/api/orders')
       ]);
 
       const products = productsRes.data;

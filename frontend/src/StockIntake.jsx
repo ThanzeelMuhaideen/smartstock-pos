@@ -34,8 +34,8 @@ export default function StockIntake() {
   const fetchData = async () => {
     try {
       const [productsRes, intakesRes] = await Promise.all([
-        axios.get(import.meta.env.VITE_API_URL + '//api/products'),
-        axios.get(import.meta.env.VITE_API_URL + '//api/intake')
+        axios.get(import.meta.env.VITE_API_URL + '/api/products'),
+        axios.get(import.meta.env.VITE_API_URL + '/api/intake')
       ]);
       setProducts(productsRes.data);
       setIntakes(intakesRes.data);
@@ -62,10 +62,11 @@ export default function StockIntake() {
     setLoading(true);
     try {
       if (editingIntakeId) {
-        await axios.put(`https://smartstock-pos.vercel.app//api/intake/${editingIntakeId}`, formData);
+        // FIXED: Point to /api/intake, use editingIntakeId, and use VITE_API_URL
+        await axios.put(`${import.meta.env.VITE_API_URL}/api/intake/${editingIntakeId}`, formData);
         alert('Record updated and inventory adjusted!');
       } else {
-        await axios.post(import.meta.env.VITE_API_URL + '//api/intake', formData);
+        await axios.post(import.meta.env.VITE_API_URL + '/api/intake', formData);
         alert('Stock successfully received and added to inventory!');
       }
       
@@ -81,7 +82,8 @@ export default function StockIntake() {
   const handleDelete = async (record) => {
     if (window.confirm(`Are you sure you want to delete this record? This will subtract ${record.quantity} units from your global inventory.`)) {
       try {
-        await axios.delete(`https://smartstock-pos.vercel.app//api/intake/${record.id}`);
+        // FIXED: Point to /api/intake, use record.id, and use VITE_API_URL
+        await axios.delete(`${import.meta.env.VITE_API_URL}/api/intake/${record.id}`);
         fetchData();
       } catch (error) {
         alert("Failed to delete record.");

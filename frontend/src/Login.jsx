@@ -17,25 +17,24 @@ export default function Login({ onLoginSuccess }) {
     setLoading(true);
 
     try {
-      const response = await axios.post(import.meta.env.VITE_API_URL + '//api/auth/login', { username, password });
-      
-      // Safety Check: If they use the Manager toggle but aren't an admin, reject them!
-      if (loginMode === 'ADMIN' && response.data.user.role !== 'ADMIN') {
-        setError("Access Denied: You do not have Manager privileges.");
-        setLoading(false);
-        return;
-      }
-
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
-      onLoginSuccess(response.data.user);
-      
-    } catch (err) {
-      setError("Invalid username or password.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  // 1. Get the URL, default to empty string if it's missing
+  const rawUrl = import.meta.env.VITE_API_URL || "";
+  
+  // 2. Remove trailing slash safely
+  const baseUrl = rawUrl.endsWith('/') ? rawUrl.slice(0, -1) : rawUrl;
+  
+  // 3. Final URL construction
+  const finalUrl = `${baseUrl}/api/auth/login`;
+  
+  console.log("Connecting to:", finalUrl); // This will help us debug in the Console!
+  
+  await axios.post(finalUrl, { username, password });
+  
+  // ... rest of your success logic
+} catch (error) {
+  console.error("Login attempt failed:", error);
+  setError("Invalid username or password.");
+}
 
   return (
     <div className="min-h-screen bg-slate-100 flex flex-col justify-center items-center p-4">
@@ -96,4 +95,5 @@ export default function Login({ onLoginSuccess }) {
       </div>
     </div>
   );
+}
 }

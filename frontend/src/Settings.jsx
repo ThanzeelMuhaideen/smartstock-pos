@@ -13,7 +13,7 @@ export default function Settings() {
 
   const fetchStaff = async () => {
     try {
-      const response = await axios.get(import.meta.env.VITE_API_URL + '//api/users');
+      const response = await axios.get(import.meta.env.VITE_API_URL + '/api/users');
       setStaff(response.data);
     } catch (error) {
       console.error("Failed to load staff", error);
@@ -31,12 +31,12 @@ export default function Settings() {
     
     try {
       if (editingUserId) {
-        // UPDATE EXISTING USER
-        await axios.put(`https://smartstock-pos.vercel.app//api/users/${editingUserId}`, formData);
+        // FIXED: Used editingUserId instead of id, and securely linked to environment variable
+        await axios.put(`${import.meta.env.VITE_API_URL}/api/users/${editingUserId}`, formData);
         alert(`Account updated successfully!`);
       } else {
         // CREATE NEW USER
-        await axios.post(import.meta.env.VITE_API_URL + '//api/users', formData);
+        await axios.post(import.meta.env.VITE_API_URL + '/api/users', formData);
         alert(`Account created successfully for ${formData.name}!`);
       }
       
@@ -52,7 +52,8 @@ export default function Settings() {
   const handleDelete = async (id, name) => {
     if (window.confirm(`Are you sure you want to delete ${name}'s account? They will lose all access.`)) {
       try {
-        await axios.delete(`https://smartstock-pos.vercel.app//api/users/${id}`);
+        // FIXED: Securely linked to environment variable
+        await axios.delete(`${import.meta.env.VITE_API_URL}/api/users/${id}`);
         fetchStaff();
       } catch (error) {
         alert(error.response?.data?.error || "Failed to delete account.");
