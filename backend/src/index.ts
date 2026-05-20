@@ -20,11 +20,8 @@ const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
-app.use(cors({
-  origin: ["https://smartstock-pos-89pi.vercel.app", "http://localhost:5173"],
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  credentials: true
-}));
+app.use(cors());
+app.use(express.json());
 
 // --- PRODUCT ROUTES ---
 

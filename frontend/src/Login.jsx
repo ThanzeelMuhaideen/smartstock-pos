@@ -4,8 +4,8 @@ import { Lock, User, ShieldCheck, Store } from 'lucide-react';
 
 export default function Login({ onLoginSuccess }) {
   // NEW: The Toggle State!
-  const [loginMode, setLoginMode] = useState('CASHIER'); 
-  
+  const [loginMode, setLoginMode] = useState('CASHIER');
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -17,43 +17,44 @@ export default function Login({ onLoginSuccess }) {
     setLoading(true);
 
     try {
-  // 1. Get the URL, default to empty string if it's missing
-  const rawUrl = import.meta.env.VITE_API_URL || "";
-  
-  // 2. Remove trailing slash safely
-  const baseUrl = rawUrl.endsWith('/') ? rawUrl.slice(0, -1) : rawUrl;
-  
-  // 3. Final URL construction
-  const finalUrl = `${baseUrl}/api/auth/login`;
-  
-  console.log("Connecting to:", finalUrl); // This will help us debug in the Console!
-  
-  await axios.post(finalUrl, { username, password });
-  
-  // ... rest of your success logic
-} catch (error) {
-  console.error("Login attempt failed:", error);
-  setError("Invalid username or password.");
-}
+      const response = await axios.post(import.meta.env.VITE_API_URL + '/api/auth/login', { username, password });
+
+      // Safety Check: If they use the Manager toggle but aren't an admin, reject them!
+      if (loginMode === 'ADMIN' && response.data.user.role !== 'ADMIN') {
+        setError("Access Denied: You do not have Manager privileges.");
+        setLoading(false);
+        return;
+      }
+
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+      onLoginSuccess(response.data.user);
+
+    } catch (err) {
+      setError("Invalid username or password.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-slate-100 flex flex-col justify-center items-center p-4">
-      
+
       <div className="mb-8 text-center">
         <h1 className="text-4xl font-black text-blue-600 tracking-tight">SmartStock<span className="text-slate-800">.</span></h1>
       </div>
 
       <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md border border-slate-200">
-        
+
         {/* NEW: THE TOGGLE SWITCH */}
         <div className="flex bg-slate-100 p-1 rounded-xl mb-8">
-          <button 
+          <button
             onClick={() => setLoginMode('CASHIER')}
             className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg font-bold text-sm transition-all ${loginMode === 'CASHIER' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
           >
             <Store size={16} /> Cashier
           </button>
-          <button 
+          <button
             onClick={() => setLoginMode('ADMIN')}
             className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg font-bold text-sm transition-all ${loginMode === 'ADMIN' ? 'bg-slate-800 text-white shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
           >
@@ -64,7 +65,7 @@ export default function Login({ onLoginSuccess }) {
         <h2 className="text-xl font-bold text-slate-800 mb-6 text-center">
           {loginMode === 'CASHIER' ? 'Terminal Access' : 'Management Portal'}
         </h2>
-        
+
         {error && (
           <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm font-bold text-center mb-6 border border-red-200">
             {error}
@@ -96,4 +97,4 @@ export default function Login({ onLoginSuccess }) {
     </div>
   );
 }
-}
+
